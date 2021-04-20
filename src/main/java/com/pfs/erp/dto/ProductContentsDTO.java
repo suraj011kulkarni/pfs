@@ -1,10 +1,18 @@
 package com.pfs.erp.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class ProductContentsDTO {
 
     private Long id;
+
+    @NotNull(message = "product name should not be null")
     private String productName;
+
+    @NotNull(message = "content name should not be null")
     private String contentsName;
+
+    @NotNull(message = "weight should not be null")
     private Double weight;
 
     public ProductContentsDTO() {

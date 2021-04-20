@@ -1,19 +1,30 @@
 package com.pfs.erp.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@Entity
 @Table
 public class ProductContents {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id",referencedColumnName = "id")
     private Product product;
 
-    @Column
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "contents_id",referencedColumnName = "id")
     private Contents contents;
 
     @Column

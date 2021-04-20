@@ -1,33 +1,34 @@
 package com.pfs.erp.service;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.pfs.erp.config.Bootstrap;
+import com.pfs.erp.dao.ProductDAOI;
 import com.pfs.erp.domain.Product;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class ProductService {
 
+    @Autowired
+    private ProductDAOI productDAOI;
 
-    public Set<Product> getList(){
-        return Bootstrap.productSet;
+    public List<Product> getList(){
+        return productDAOI.findAll();
     }
 
     public Product save(Product product){
 
-        Product p1 = Bootstrap.getProductByName(product.getName());
+        Optional<Product> p1 = productDAOI.findByName(product.getName());
 
-        if(p1==null){
-            Bootstrap.productSet.add(product);
+        if(!p1.isPresent()){
+            productDAOI.save(product);
             return product;
         }else{
-            // TODO: throw an error as record already exist
             return null;
         }
     }
@@ -35,37 +36,37 @@ public class ProductService {
 
     public Product update(Long id,Product product){
 
-        Product p1 = Bootstrap.getProductById(id);
+        Optional<Product> p1  = productDAOI.findById(id);
 
-        if(p1!=null){
-            BeanUtils.copyProperties(product,p1,"id","sellPrice","basePrice");
-            return product;
+        if(p1.isPresent()){
+            Product productObject = p1.get();
+            BeanUtils.copyProperties(product,productObject,"id","sellPrice","basePrice");
+            productDAOI.save(productObject);
+            return productObject;
         }else{
-            // TODO: throw an error as record already exist
             return null;
         }
     }
 
     public Product getById(Long id){
 
-        Product p1 = Bootstrap.getProductById(id);
+        Optional<Product> p1  = productDAOI.findById(id);
 
-        if(p1!=null){
-            return p1;
+        if(p1.isPresent()){
+
+            return p1.get();
         }else{
-            // TODO: throw an error as record not found
             return null;
         }
     }
 
     public Product getByName(String name){
 
-        Product p1 = Bootstrap.getProductByName(name);
+        Optional<Product> p1 = productDAOI.findByName(name);
 
-        if(p1!=null){
-            return p1;
+        if(p1.isPresent()){
+            return p1.get();
         }else{
-            // TODO: throw an error as record not found
             return null;
         }
     }

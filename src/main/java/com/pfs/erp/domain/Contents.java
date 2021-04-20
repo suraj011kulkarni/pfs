@@ -1,13 +1,18 @@
 package com.pfs.erp.domain;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Entity
 @Table
 public class Contents {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -50,7 +55,7 @@ public class Contents {
     }
 
     public Double getPrice() {
-        return price;
+        return price!=null?price:0;
     }
 
     public void setPrice(Double price) {
